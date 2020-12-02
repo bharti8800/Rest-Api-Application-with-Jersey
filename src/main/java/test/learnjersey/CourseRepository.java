@@ -1,34 +1,50 @@
 package test.learnjersey;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import test.learnjersey.Course;
 
 public class CourseRepository {
-	private List<Course> courseList;
-	
+
+	Connection con;
 	public CourseRepository() {
-		courseList = new ArrayList<>();
+		String url = "jdbc:mysql://localhost:3306/restApiTest";
+		String username = "root";
+		String password = "password";
 		
-		Course course1 = new Course();
-		course1.setName("SDM");
-		course1.setCode(6441);
-		
-		Course course2 = new Course();
-		course2.setName("SPM");
-		course2.setCode(6461);
-		
-		courseList.add(course1);
-		courseList.add(course2);
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection(url, username, password);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
 	}
 	
 	public List<Course> getCourses(){
+		List<Course> courseList = new ArrayList<>();
+		String sql = "Select * from course";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Course course = new Course();
+				course.setName(rs.getString(2));
+				course.setCode(Integer.parseInt(rs.getString(1)));
+		
+				courseList.add(course);
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
 		return courseList;
 	}
 	
 	public Course getCourseByCode(int code) {
-		
+		List<Course> courseList = getCourses();
 		for(Course course : courseList){
 			if(course.getCode() == code)
 				return course;
@@ -37,7 +53,18 @@ public class CourseRepository {
 	}
 
 	public void create(Course c1) {
-		// TODO Auto-generated method stub
-		courseList.add(c1);
+		String name = c1.getName();
+		int code = c1.getCode();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String sql = "Insert into course values ( " + code + ",'" + name + "')";
+			
+			stmt.executeUpdate(sql);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
 	}
 }

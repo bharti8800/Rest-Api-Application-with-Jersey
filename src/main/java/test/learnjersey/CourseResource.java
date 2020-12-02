@@ -3,6 +3,7 @@ package test.learnjersey;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,7 +25,7 @@ public class CourseResource {
 	
 	@POST
 	@Path("course")
-	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	public Course createCourse(Course c1) {
 		//System.out.println("hello doll");
 		courseRepository.create(c1);
