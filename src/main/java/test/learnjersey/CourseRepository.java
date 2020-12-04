@@ -67,4 +67,32 @@ public class CourseRepository {
 		}
 		
 	}
+	
+	public void update(Course c1) {
+		String sql = "update course set name = ? where code = ?";
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setString(1, c1.getName());
+			stmt.setInt(2, c1.getCode());
+			
+			stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void delete(int code) {
+		String sql = "Delete from course Where code = ?";
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setInt(1, code);
+			stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
 }
